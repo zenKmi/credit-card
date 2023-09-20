@@ -25,8 +25,8 @@ export function digitCountValidation(input) {
 export function cvvCountValidation(input) {
   if (input.length < 1) {
     return {
-      cardNumber: input,
-      errorText: "",
+      cvv: input,
+      cvvError: "",
     };
   }
   let clearInput = input.replace(/[^0-9]/g, "");
@@ -36,11 +36,11 @@ export function cvvCountValidation(input) {
   }
 
   if (clearInput.length >= 3 && clearInput.length <= 4) {
-    return { cardNumber: clearInput, errorText: "" };
+    return { cvv: clearInput, cvvError: "" };
   } else {
     return {
-      cardNumber: clearInput,
-      errorText:
+      cvv: clearInput,
+      cvvError:
         "CVV/CVC must be between 3 to 4 numbers long.",
     };
   }

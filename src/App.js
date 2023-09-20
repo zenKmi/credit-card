@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { digitCountValidation } from './Utils';
+import { cvvCountValidation, digitCountValidation } from './Utils';
 
 import './App.css';
 import dayjs from 'dayjs';
@@ -12,14 +12,26 @@ function App() {
 
   const [cardNumber, setCardNumber] = useState('');
   const [errorText, setErrorText] = useState('');
+  const [cvvError, setCVVError] = useState("");
+  const [cvv, setCVV] = useState('');
   const today = dayjs().add(1, 'month');
 
-  function handleInputChange(event){
+  function handleInputChange(event) {
     const input = event.target.value;
-    const {cardNumber, errorText} = digitCountValidation(input);
+    switch (event.target.id) {
+      case "cardNumber":
+        const { cardNumber, errorText } = digitCountValidation(input);
 
-    setErrorText(errorText);
-    setCardNumber(cardNumber);
+        setErrorText(errorText);
+        setCardNumber(cardNumber);
+        break;
+      case "cvv":
+        const { cvv, cvvError } = cvvCountValidation(input);
+
+        setCVV(cvv);
+        setCVVError(cvvError);
+        break;
+    }
   }
 
   return (
@@ -29,13 +41,13 @@ function App() {
 
         <hr></hr>
         
-        <TextField variant="standard" label="Card number" style={{ marginTop: "20px", marginBottom: "40px", width: '100%' }} value={cardNumber} onChange={handleInputChange} helperText={errorText} error={!!errorText}></TextField>
+        <TextField id="cardNumber" variant="standard" label="Card number" style={{ marginTop: "20px", marginBottom: "40px", width: '100%' }} value={cardNumber} onChange={handleInputChange} helperText={errorText} error={!!errorText}></TextField>
         
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker label="MM/YY" views={["month", "year"]} style={{marginBottom: "40px"}} minDate={today}></DatePicker>
+          <DatePicker label="MM/YY" views={["month", "year"]} style={{marginBottom: "40px"}} minDate={today} slotProps={{textField: {disabled: true}}}/>
         </LocalizationProvider>
         
-        <TextField variant="standard" label="CVV/CVC" style={{ marginBottom: "20px", width: '20%', marginLeft: '20px'}}></TextField>
+        <TextField id="cvv" variant="standard" label="CVV/CVC" style={{ marginBottom: "20px", width: '20%', marginLeft: '20px'}} value={cvv} onChange={handleInputChange} helperText={cvvError} error={!!cvvError}></TextField>
         
         <TextField variant="standard" label="Cardholder's name" style={{ marginBottom: "40px", width: "80%" }}></TextField>
         
