@@ -38,8 +38,11 @@ This project was created using `JavaScript` as the main programming language, wi
 It consists in a simple page for credit card payment, where:
 
 -Expiration date must be AFTER present time.
+
 -CVV must be exactly 3 digits long, unless it is an American Express card.
+
 -PAN must be between 16 and 19 digits long.
+
 -Last PAN number is checked using Luhn's algorithm.
 
 Every function that does backend functionalities is stored in `Utils.js`, while `PaymentForm.js` is the file which has most of the frontend configurations and all the form layout created through JS, and finally `App.js` is the main file that imports `PaymentForm.js` in order to show it in the main view. There's also an additional script called `Particles.jsx`, that is used as a configuration file for the particles effect on the main view.
