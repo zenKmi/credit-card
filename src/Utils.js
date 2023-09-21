@@ -37,7 +37,7 @@ export function CVVCountValidation(input, isCVVLonger) {
     clearInput = clearInput.slice(0, maxLength);
   }
 
-  if (clearInput.length <= maxLength) {
+  if (clearInput.length >= maxLength) {
     return { cvv: clearInput, cvvError: "" };
   } else {
     return {
