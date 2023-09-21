@@ -1,10 +1,4 @@
-import {
-  Container,
-  TextField,
-  Typography,
-  Paper,
-  Button,
-} from "@mui/material";
+import { Container, TextField, Typography, Paper, Button } from "@mui/material";
 import React, { useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -29,12 +23,15 @@ function PaymentForm() {
   const [cvvError, setCVVError] = useState("");
   const [isAmericanExpress, setIsAmericanExpress] = useState("");
   const [cvv, setCVV] = useState("");
-  const [cardHolder, setCardHolder] = useState('');
+  const [cardHolder, setCardHolder] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+
   const today = dayjs().add(1, "month");
 
   const [cardNumberValid, setCardNumberValid] = useState("");
   const [cvvValid, setCVVValid] = useState("");
   const [cardHolderValid, setCardHolderValid] = useState("");
+  const [expirationValid, setExpirationValid] = useState("");
 
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -42,7 +39,6 @@ function PaymentForm() {
 
   const [successSnackbarOpen, setSuccessSnackbarOpen] = React.useState(false);
   const [errorSnackbbarOpen, setErrorSnackbarOpen] = React.useState(false);
-  
 
   const handlePayNow = async () => {
     try {
@@ -64,13 +60,23 @@ function PaymentForm() {
       setCVVValid(responseCVV.data.success);
 
       const responseCardHolder = await axios.post(
-        "http://localhost:3001/validate-name-is-not-empty", {
+        "http://localhost:3001/validate-name-is-not-empty",
+        {
           cardHolder,
         }
       );
       setCardHolderValid(responseCardHolder.data.success);
 
-      (cardNumberValid && cvvValid && cardHolderValid) ? setSuccessSnackbarOpen(true) : setErrorSnackbarOpen(true);
+      const responseExpirationDate = await axios.post(
+        "http://localhost:3001/validate-expiration-date", {
+          expirationDate,
+        }
+      );
+      setExpirationValid(responseExpirationDate.data.success);
+
+      cardNumberValid && cvvValid && cardHolderValid && expirationValid
+        ? setSuccessSnackbarOpen(true)
+        : setErrorSnackbarOpen(true);
     } catch (error) {
       console.log("Something went wrong with the API. Fix it!", error);
     }
@@ -91,6 +97,11 @@ function PaymentForm() {
 
     setErrorSnackbarOpen(false);
   };
+
+  const handleDateChange = (date) => {
+    const formattedDate = dayjs(date).format('MM/YY');
+    setExpirationDate(formattedDate);
+  }
 
   function handleInputChange(event) {
     const input = event.target.value;
@@ -167,6 +178,8 @@ function PaymentForm() {
             style={{ marginBottom: "40px" }}
             minDate={today}
             slotProps={{ textField: { disabled: true } }}
+            onChange={(date) => handleDateChange(date)}
+
           />
         </LocalizationProvider>
 
@@ -198,7 +211,7 @@ function PaymentForm() {
 
       <Snackbar
         open={successSnackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handleSuccessSnackbarClose}
       >
         <Alert
@@ -211,7 +224,7 @@ function PaymentForm() {
       </Snackbar>
       <Snackbar
         open={errorSnackbbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handleErrorSnackbarClose}
       >
         <Alert
