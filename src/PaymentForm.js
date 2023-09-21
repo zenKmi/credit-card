@@ -48,19 +48,14 @@ function PaymentForm() {
     try {
       console.log("1");
       const response = await axios.post(
-        "http://localhost:3001/validate-digit-count",
+        "http://localhost:3001/validate-card-luhns-algorithm",
         {
           cardNumber,
-          cvv,
         }
       );
       console.log(2);
       console.log(response.data);
-      if (response.data.success === true) {
-        setSuccessSnackbarOpen(true);
-      } else {
-        setErrorSnackbarOpen(true);
-      }
+      (response.data.success) ? setSuccessSnackbarOpen(true) : setErrorSnackbarOpen(true);
     } catch (error) {
       console.log("Something went wrong with the API. Fix it!", error);
     }
@@ -98,13 +93,8 @@ function PaymentForm() {
 
       setErrorText(errorText);
       setCardNumber(cardNumber);
-      if (input.length >= 16) {
-        const validCard = LuhnsAlgorithmLastDigitCheck(cardNumber);
-        setCardNumberValid(validCard);
-        setErrorText(validCard ? "" : "PAN is no a valid sequence.");
-      } else {
-        setCardNumberValid(false);
-      }
+      const validCard = LuhnsAlgorithmLastDigitCheck(cardNumber);
+      setCardNumberValid(validCard);
     } else if (event.target.id === "cvv") {
       const { cvv, cvvError } = CVVCountValidation(input, isAmericanExpress);
 

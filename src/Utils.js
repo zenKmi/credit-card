@@ -62,6 +62,10 @@ export function LuhnsAlgorithmLastDigitCheck(input){
   const reversedCardNumber = trimmedInput.split('').reverse().join('');
   let sum = 0;
 
+  if (input.length < 16){
+    return (false);
+  }
+
   for (let i = 0; i < reversedCardNumber.length; i++){
     let digit = parseInt(reversedCardNumber[i], 10);
 

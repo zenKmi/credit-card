@@ -68,10 +68,8 @@ app.post("/validate-digit-count", (req, res) => {
 
 app.post("/validate-card-luhns-algorithm", (req, res) => {
   const { cardNumber } = req.body;
-
-  const isValid = LuhnsAlgorithmLastDigitCheck(cardNumber);
-
-  res.json({ isValid });
+  const success = LuhnsAlgorithmLastDigitCheck(cardNumber);
+  res.json({ success });
 });
 
 const port = process.env.PORT || 3001;
