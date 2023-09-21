@@ -45,25 +45,25 @@ function PaymentForm() {
   
 
   const handlePayNow = async () => {
-    // try {
-    //   console.log("1");
-    //   const response = await axios.post(
-    //     "http://localhost:3001/validate-credit-card",
-    //     {
-    //       cardNumber,
-    //       cvv,
-    //       cardHolder,
-    //     }
-    //   );
-    //   console.log(2);
-    //   if (response.data === true) {
-    //     setSuccessSnackbarOpen(true);
-    //   } else {
-    //     setErrorSnackbarOpen(true);
-    //   }
-    // } catch (error) {
-    //   console.log("Something went wrong with the API. Fix it!", error);
-    // }
+    try {
+      console.log("1");
+      const response = await axios.post(
+        "http://localhost:3001/validate-digit-count",
+        {
+          cardNumber,
+          cvv,
+        }
+      );
+      console.log(2);
+      console.log(response.data);
+      if (response.data.success === true) {
+        setSuccessSnackbarOpen(true);
+      } else {
+        setErrorSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.log("Something went wrong with the API. Fix it!", error);
+    }
   };
 
   const handleSuccessSnackbarClose = (event, reason) => {

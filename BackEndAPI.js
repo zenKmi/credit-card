@@ -50,6 +50,22 @@ app.post("/validate-credit-card", (req, res) => {
   }
 });
 
+app.post("/validate-digit-count", (req, res) => {
+  const { cardNumber, cvv } = req.body;
+
+  const { cardNumber: validatedCardNumber, errorText: panErrorText} = PANCountValidation(cardNumber);
+
+  const isAmericanExpress = CardNetworkCheck(validatedCardNumber);
+
+  const { cvv: validatedCVV, cvvError: cvvErrorText } = CVVCountValidation(cvv, isAmericanExpress);
+
+  if (cvvErrorText.length > 1 || panErrorText.lenght > 1){
+    res.status(400).json({ success: false});
+  } else {
+    res.status(200).json({ success: true });
+  }
+});
+
 app.post("/validate-card-luhns-algorithm", (req, res) => {
   const { cardNumber } = req.body;
 
