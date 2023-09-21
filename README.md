@@ -8,7 +8,7 @@ Universidad Católica de El Salvador
 
 ## Instructions to run this script
 
-Make sure you have `npm` installed in your computer and after downloading the source code from github, run `npm install`. After a few seconds it should be complete, so you can go ahead and run `npm start`.
+Make sure you have `npm` installed in your computer and after downloading the source code from github, run `npm install`. After a few seconds it should be complete, so you can go ahead and run `npm start`, to start the `React` app, and in another terminal or tab, run `node BackEndAPI.js`,  to run `Express` server along.
 
 It should automatically open on your default browser, and so you can start testing this app.
 
@@ -26,7 +26,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 -`react-tsparticles`
 
--`react-helmet`
+-`react-helmet-async`
+
+-`Express`
 
 
 ## More info
@@ -41,6 +43,8 @@ It consists in a simple page for credit card payment, where:
 -Last PAN number is checked using Luhn's algorithm.
 
 Every function that does backend functionalities is stored in `Utils.js`, while `PaymentForm.js` is the file which has most of the frontend configurations and all the form layout created through JS, and finally `App.js` is the main file that imports `PaymentForm.js` in order to show it in the main view. There's also an additional script called `Particles.jsx`, that is used as a configuration file for the particles effect on the main view.
+
+Some validations are done while running on frontend, just to give a more graphical feedback if you are making a mistake, and will trigger as you change the fields content. When `PAY NOW` button is pressed, it calls a file called `BackEndAPI.js`, which is the Express server's API running along, to make a last moment check before deciding if all info is ready to be exported to a server or Bank API. You will see a small snackbar on your screen's bottom left, showing if BackEndAPI was success or not.
 
 # Additional (default) React info
 
