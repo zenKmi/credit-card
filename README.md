@@ -17,9 +17,13 @@ It should automatically open on your default browser, and so you can start testi
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 -`Material UI / MUI`
+
 -`NodeJS`
+
 -`React`
+
 -`create-react-app`
+
 -`react-tsparticles`
 
 
