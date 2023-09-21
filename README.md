@@ -1,10 +1,14 @@
 # LevelUp Internship challenge resolution October 2023
 
 Name: Rodrigo Enrique Marín Larios
+
 Graduate for Information Systems Engineering
+
 Universidad Católica de El Salvador
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+T
+
+his project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Instructions to run this script
 
