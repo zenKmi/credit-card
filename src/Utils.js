@@ -22,11 +22,12 @@ export function PANCountValidation(input) {
   }
 }
 
-export function CVVCountValidation(input, isCVVLonger) {
+export function CVVCountValidation(input, isCVVLonger=false) {
   if (input.length < 1) {
     return {
       cvv: input,
       cvvError: "",
+      length: 3,
     };
   }
   let clearInput = input.replace(/[^0-9]/g, "");
@@ -38,11 +39,12 @@ export function CVVCountValidation(input, isCVVLonger) {
   }
 
   if (clearInput.length >= maxLength) {
-    return { cvv: clearInput, cvvError: "" };
+    return { cvv: clearInput, cvvError: "", length: maxLength};
   } else {
     return {
       cvv: clearInput,
       cvvError: "CVV/CVC must be " + maxLength + " numbers long.",
+      length: maxLength,
     };
   }
 }

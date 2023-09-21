@@ -47,15 +47,26 @@ function PaymentForm() {
   const handlePayNow = async () => {
     try {
       console.log("1");
-      const response = await axios.post(
+      const responsePAN = await axios.post(
         "http://localhost:3001/validate-card-luhns-algorithm",
         {
           cardNumber,
         }
       );
       console.log(2);
-      console.log(response.data);
-      (response.data.success) ? setSuccessSnackbarOpen(true) : setErrorSnackbarOpen(true);
+      console.log(responsePAN.data);
+      setCardNumberValid(responsePAN.data.success);
+
+      const responseCVV = await axios.post(
+        "http://localhost:3001/validate-cvv-digit-count",
+        {
+          cardNumber,
+          cvv,
+        }
+      );
+      console.log(responseCVV.data);
+      setCVVValid(responseCVV.data.success);
+
     } catch (error) {
       console.log("Something went wrong with the API. Fix it!", error);
     }
@@ -93,8 +104,6 @@ function PaymentForm() {
 
       setErrorText(errorText);
       setCardNumber(cardNumber);
-      const validCard = LuhnsAlgorithmLastDigitCheck(cardNumber);
-      setCardNumberValid(validCard);
     } else if (event.target.id === "cvv") {
       const { cvv, cvvError } = CVVCountValidation(input, isAmericanExpress);
 
