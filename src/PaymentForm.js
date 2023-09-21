@@ -11,6 +11,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
+import axios from "axios";
+
 import {
   CVVCountValidation,
   PANCountValidation,
@@ -27,6 +29,7 @@ function PaymentForm() {
   const [cvvError, setCVVError] = useState("");
   const [isAmericanExpress, setIsAmericanExpress] = useState("");
   const [cvv, setCVV] = useState("");
+  const [cardHolder, setCardHolder] = useState('');
   const today = dayjs().add(1, "month");
 
   const [cardNumberValid, setCardNumberValid] = useState("");
@@ -39,15 +42,28 @@ function PaymentForm() {
 
   const [successSnackbarOpen, setSuccessSnackbarOpen] = React.useState(false);
   const [errorSnackbbarOpen, setErrorSnackbarOpen] = React.useState(false);
+  
 
-  const handlePayNow = () => {
-    if (cardNumberValid && cvvValid && cardHolderValid) {
-      setSuccessSnackbarOpen(true);
-    } else {
-      //Fail
-      setErrorSnackbarOpen(true);
-      console.log(cardNumberValid + " " + cvvValid + " " + cardHolderValid);
-    }
+  const handlePayNow = async () => {
+    // try {
+    //   console.log("1");
+    //   const response = await axios.post(
+    //     "http://localhost:3001/validate-credit-card",
+    //     {
+    //       cardNumber,
+    //       cvv,
+    //       cardHolder,
+    //     }
+    //   );
+    //   console.log(2);
+    //   if (response.data === true) {
+    //     setSuccessSnackbarOpen(true);
+    //   } else {
+    //     setErrorSnackbarOpen(true);
+    //   }
+    // } catch (error) {
+    //   console.log("Something went wrong with the API. Fix it!", error);
+    // }
   };
 
   const handleSuccessSnackbarClose = (event, reason) => {
@@ -74,20 +90,20 @@ function PaymentForm() {
       setIsAmericanExpress(CardNetworkCheck(input));
 
       if (!CardNetworkCheck(input)) {
-          setCVV(cvv.slice(0, 3));
-          setCVVError(false);
+        setCVV(cvv.slice(0, 3));
+        setCVVError(false);
       } else {
         setCVVError(true);
       }
 
       setErrorText(errorText);
       setCardNumber(cardNumber);
-      if (input.length >= 16){
+      if (input.length >= 16) {
         const validCard = LuhnsAlgorithmLastDigitCheck(cardNumber);
         setCardNumberValid(validCard);
-        setErrorText((validCard)? '' : "PAN is no a valid sequence.");
-      } else{
-        setCardNumberValid(false)
+        setErrorText(validCard ? "" : "PAN is no a valid sequence.");
+      } else {
+        setCardNumberValid(false);
       }
     } else if (event.target.id === "cvv") {
       const { cvv, cvvError } = CVVCountValidation(input, isAmericanExpress);
@@ -101,6 +117,7 @@ function PaymentForm() {
       setCVV(cvv);
       setCVVError(cvvError);
     } else if (event.target.id === "cardholder") {
+      setCardHolder(input);
       if (input.length >= 1) {
         setCardHolderValid(true);
       } else {
@@ -119,7 +136,7 @@ function PaymentForm() {
       }}
     >
       <Paper
-        style={{ width: "35%", height: "50%", padding: "40px" }}
+        style={{ width: "35%", height: "60%", padding: "40px" }}
         elevation={7}
       >
         <Typography variant="h4" style={{ paddingBottom: "20px" }}>
