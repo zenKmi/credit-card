@@ -1,7 +1,9 @@
 import { Container, Bottom, TextField, Typography, Paper, Button, Card } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import { CVVCountValidation, PANCountValidation, CardNetworkCheck, LuhnsAlgorithmLastDigitCheck } from './Utils';
 
@@ -17,9 +19,32 @@ function App() {
   const [cvv, setCVV] = useState('');
   const today = dayjs().add(1, 'month');
 
-  let cardNumberValid = false;
-  let cvvValid = false;
-  let cardHolderValid = false;
+  const [ cardNumberValid, setCardNumberValid ] = useState("");
+  const [ cvvValid, setCVVValid ] = useState("");
+  const [ cardHolderValid, setCardHolderValid ] = useState("");
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="outlined" {...props} />;
+  });
+
+  const [open, setOpen] = React.useState(false);
+
+  const handlePayNow = () => {
+    if (cardNumberValid && cvvValid && cardHolderValid){
+      setOpen(true);
+    } else {
+      //Fail
+      console.log(cardNumberValid + " " + cvvValid + " " + cardHolderValid);
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   function handleInputChange(event) {
     const input = event.target.value;
@@ -30,7 +55,7 @@ function App() {
 
       if (!CardNetworkCheck(input)) setCVV(cvv.slice(0, 3));
 
-      cardNumberValid = (input.length >= 16) ? LuhnsAlgorithmLastDigitCheck(cardNumber) : false;
+      setCardNumberValid((input.length >= 16) ? LuhnsAlgorithmLastDigitCheck(cardNumber) : false);
 
       setErrorText(errorText);
       setCardNumber(cardNumber);
@@ -39,9 +64,9 @@ function App() {
       const { cvv, cvvError } = CVVCountValidation(input, isAmericanExpress);
 
       if (cvv.length == (isAmericanExpress) ? 4 : 3){
-        cvvValid = true;
+        setCVVValid(true);
       } else {
-        cvvValid = false;
+        setCVVValid(false);
       }
 
       setCVV(cvv);
@@ -49,19 +74,10 @@ function App() {
 
     } else if (event.target.id === "cardholder"){
       if (input.length >= 1){
-        cardHolderValid = true;
+        setCardHolderValid(true);
       } else {
-        cardHolderValid = false;
+        setCardHolderValid(false);
       }
-    }
-  }
-
-  function handlePayNow(event) {
-    console.log(":D")
-    if (cardNumberValid && cvvValid && cardHolderValid){
-      console.log("Todo nice :D");
-    } else {
-      console.log(";-;");
     }
   }
 
@@ -86,6 +102,11 @@ function App() {
         
         <Button variant="contained" onClick={handlePayNow}>Pay now</Button>
       </Paper>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Payment process has been succesful!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
