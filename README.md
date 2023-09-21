@@ -6,10 +6,6 @@ Graduate for Information Systems Engineering
 
 Universidad Católica de El Salvador
 
-
-
-his project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Instructions to run this script
 
 Make sure you have `npm` installed in your computer and after downloading the source code from github, run `npm install`. After a few seconds it should be complete, so you can go ahead and run `npm start`.
@@ -17,6 +13,8 @@ Make sure you have `npm` installed in your computer and after downloading the so
 It should automatically open on your default browser, and so you can start testing this app.
 
 ## Libraries used on project
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 -`Material UI / MUI`
 -`NodeJS`
