@@ -46,15 +46,12 @@ function PaymentForm() {
 
   const handlePayNow = async () => {
     try {
-      console.log("1");
       const responsePAN = await axios.post(
         "http://localhost:3001/validate-card-luhns-algorithm",
         {
           cardNumber,
         }
       );
-      console.log(2);
-      console.log(responsePAN.data);
       setCardNumberValid(responsePAN.data.success);
 
       const responseCVV = await axios.post(
@@ -64,9 +61,16 @@ function PaymentForm() {
           cvv,
         }
       );
-      console.log(responseCVV.data);
       setCVVValid(responseCVV.data.success);
 
+      const responseCardHolder = await axios.post(
+        "http://localhost:3001/validate-name-is-not-empty", {
+          cardHolder,
+        }
+      );
+      setCardHolderValid(responseCardHolder.data.success);
+
+      (cardNumberValid && cvvValid && cardHolderValid) ? setSuccessSnackbarOpen(true) : setErrorSnackbarOpen(true);
     } catch (error) {
       console.log("Something went wrong with the API. Fix it!", error);
     }
